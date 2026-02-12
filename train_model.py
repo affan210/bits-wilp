@@ -18,9 +18,13 @@ if not os.path.exists('model'):
     os.makedirs('model')
 
 # 2. Load Dataset (Breast Cancer Wisconsin Diagnostic)
-data = load_breast_cancer()
-X = pd.DataFrame(data.data, columns=data.feature_names)
-y = pd.Series(data.target)
+data = pd.read_csv("breast_cancer_wisconsin_data.csv").drop(columns=['Unnamed: 32'], errors='ignore')  # load_breast_cancer()
+print(data.columns)
+print(data.isna().sum())
+data = data.dropna()
+print(data.shape)
+X = data.drop(columns=['diagnosis', 'id'])  # pd.DataFrame(data.data, columns=data.feature_names)
+y = data['diagnosis'].map({'M': 0, 'B': 1})  # Malignant = Cancer := 0 Benign = Non-Cancerous := 1 # pd.Series(data.target)
 
 # Split Data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
