@@ -24,10 +24,14 @@ print(data.isna().sum())
 data = data.dropna()
 print(data.shape)
 X = data.drop(columns=['diagnosis', 'id'])  # pd.DataFrame(data.data, columns=data.feature_names)
-y = data['diagnosis'].map({'M': 0, 'B': 1})  # Malignant = Cancer := 0 Benign = Non-Cancerous := 1 # pd.Series(data.target)
+y = data['diagnosis'].map({'M': 1, 'B': 0})  # Malignant = Cancer := 1 Benign = Non-Cancerous := 0 # pd.Series(data.target)
 
 # Split Data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Save Test CSV
+test_df = pd.concat([X_test, y_test], axis=1)
+test_df.to_csv("test_data.csv", index=False)
 
 # 3. Preprocessing (Scaling is crucial for KNN and Logistic Regression)
 scaler = StandardScaler()
